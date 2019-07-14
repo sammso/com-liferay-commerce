@@ -20,17 +20,19 @@ import com.liferay.commerce.product.permission.CommerceProductViewPermission;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelLocalService;
 import com.liferay.commerce.product.util.CPInstanceHelper;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProvider;
-import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderContext;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderException;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderRequest;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse;
-import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponseOutput;
+// TODO : just to fix to compile
+// import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponseOutput;
+import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponseStatus;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -57,48 +59,72 @@ import org.osgi.service.component.annotations.Reference;
 public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 
 	@Override
-	public List<KeyValuePair> getData(
-			DDMDataProviderContext ddmDataProviderContext)
-		throws DDMDataProviderException {
-
-		return Collections.emptyList();
-	}
-
-	@Override
 	public DDMDataProviderResponse getData(
 			DDMDataProviderRequest ddmDataProviderRequest)
 		throws DDMDataProviderException {
 
-		HttpServletRequest httpServletRequest =
-			ddmDataProviderRequest.getHttpServletRequest();
+// TODO: just fixed to compile	
+//		HttpServletRequest httpServletRequest =
+//			ddmDataProviderRequest.getHttpServletRequest();
+//
+//		Locale locale = httpServletRequest.getLocale();
+//
+//		long cpDefinitionId = GetterUtil.getLong(
+//			ddmDataProviderRequest.getParameter("cpDefinitionId"));
+//
+//		long commerceAccountId = GetterUtil.getLong(
+//			ddmDataProviderRequest.getParameter("commerceAccountId"));
 
-		Locale locale = httpServletRequest.getLocale();
+//		long groupId = GetterUtil.getLong(
+//			ddmDataProviderRequest.getParameter("groupId"));
 
+		Locale locale = ddmDataProviderRequest.getLocale();
+		
 		long cpDefinitionId = GetterUtil.getLong(
-			ddmDataProviderRequest.getParameter("cpDefinitionId"));
+			ddmDataProviderRequest.getParameters().get("cpDefinitionId"));
 
 		long commerceAccountId = GetterUtil.getLong(
-			ddmDataProviderRequest.getParameter("commerceAccountId"));
+			ddmDataProviderRequest.getParameters().get("commerceAccountId"));		
+		
+		long groupId = ddmDataProviderRequest.getGroupId();	
 
-		long groupId = GetterUtil.getLong(
-			ddmDataProviderRequest.getParameter("groupId"));
-
+		DDMDataProviderResponse.Builder builder =
+				DDMDataProviderResponse.Builder.newBuilder();
+		
 		try {
 			if (!_commerceProductViewPermission.contains(
 					PermissionThreadLocal.getPermissionChecker(),
 					commerceAccountId, groupId, cpDefinitionId)) {
 
-				return DDMDataProviderResponse.of();
+				//
+				// TODO: fix
+				// Just to compile
+				//					
+				// return DDMDataProviderResponse.of();	
+				return builder.withStatus(DDMDataProviderResponseStatus.OK).build();
 			}
 		}
 		catch (PortalException pe) {
-			_log.error(pe, pe);
-
-			return DDMDataProviderResponse.of();
+			_log.error(pe, pe);		
+			
+			//
+			// TODO: fix
+			// Just to compile
+			//					
+			// return DDMDataProviderResponse.of();	
+			return builder.withStatus(DDMDataProviderResponseStatus.COMMAND_EXCEPTION).build();
 		}
 
 		if (cpDefinitionId == 0) {
-			return DDMDataProviderResponse.of();
+			//
+			// TODO: fix
+			// Just to compile
+			//					
+			// return DDMDataProviderResponse.of();	
+					
+			return builder.withOutput(
+					"outputParameterNames", Collections.emptyList()
+				).build();
 		}
 
 		try {
@@ -117,9 +143,11 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 			 * 3 - Size empty and Color filled - the same approach that item 2
 			 * 4 - Size and Color both filled - the same approach that item 1
 			 */
-			Map<String, String> parameters =
+			
+			// TODO: fixed to compile <String, String> -> <String, Object>
+			Map<String, Object> parameters =
 				ddmDataProviderRequest.getParameters();
-
+			
 			Map<String, String> outputParameterNames = new HashMap<>();
 
 			Map<String, String> filters = new HashMap<>();
@@ -133,8 +161,9 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 
 				long cpDefinitionOptionRelId =
 					cpDefinitionOptionRel.getCPDefinitionOptionRelId();
-
-				String parameterValue = parameters.get(
+				
+				// TODO: fixed to compile String -> Object
+				Object parameterValue = parameters.get(
 					String.valueOf(cpDefinitionOptionRelId));
 
 				// Collect filters and outputs
@@ -147,17 +176,19 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 				else {
 					filters.put(
 						String.valueOf(cpDefinitionOptionRelId),
-						parameterValue);
+						String.valueOf(parameterValue));
 				}
 			}
 
 			// Do search and populate the outputs if the outputs are not empty
 
 			if (outputParameterNames.isEmpty()) {
-				return DDMDataProviderResponse.of();
+				// TODO: FIX just to compile
+				// return DDMDataProviderResponse.of();
+				return builder.build();	
 			}
-
-			List<DDMDataProviderResponseOutput> ddmDataProviderResponseOutputs =
+//			TODO: fix to compile ( removed )
+//			List<DDMDataProviderResponseOutput> ddmDataProviderResponseOutputs =
 				new ArrayList<>();
 
 			for (Map.Entry<String, String> outputParameterNameEntry :
@@ -185,27 +216,41 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 							key, cpDefinitionOptionValueRel.getName(locale)));
 				}
 
-				ddmDataProviderResponseOutputs.add(
-					DDMDataProviderResponseOutput.of(
-						outputParameterNameEntry.getValue(), "list", data));
+				
+//			TODO: fix to compile				
+//				ddmDataProviderResponseOutputs.add(
+//					DDMDataProviderResponseOutput.of(
+//						outputParameterNameEntry.getValue(), "list", data));
+				
+				builder = builder.withOutput("list", data);
 			}
 
-			DDMDataProviderResponseOutput[] ddmDataProviderResponseOutputArray =
-				new DDMDataProviderResponseOutput
-					[ddmDataProviderResponseOutputs.size()];
-
-			ddmDataProviderResponseOutputArray =
-				ddmDataProviderResponseOutputs.toArray(
-					ddmDataProviderResponseOutputArray);
-
-			return DDMDataProviderResponse.of(
-				ddmDataProviderResponseOutputArray);
+			
+			
+//			TODO: fix to compile				
+//			DDMDataProviderResponseOutput[] ddmDataProviderResponseOutputArray =
+//				new DDMDataProviderResponseOutput
+//					[ddmDataProviderResponseOutputs.size()];
+//
+//			ddmDataProviderResponseOutputArray =
+//				ddmDataProviderResponseOutputs.toArray(
+//					ddmDataProviderResponseOutputArray);
+//
+//			return DDMDataProviderResponse.of(
+//				ddmDataProviderResponseOutputArray);
+			
+			return builder.build();
 		}
 		catch (Exception e) {
 			_log.error(e, e);
 		}
-
-		return DDMDataProviderResponse.of();
+//
+// TODO: fix
+// Just to compile
+//		
+//		return DDMDataProviderResponse.of();	
+		
+		return builder.build();		
 	}
 
 	@Override
@@ -225,5 +270,7 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 
 	@Reference
 	private CPInstanceHelper _cpInstanceHelper;
-
+	
+	@Reference
+	protected Portal portal;
 }
