@@ -19,11 +19,11 @@ import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
-import com.liferay.portal.template.soy.utils.SoyTemplateResourcesProvider;
+import com.liferay.portal.template.soy.SoyTemplateResourceFactory;
+import com.liferay.portal.template.soy.util.SoyTemplateResourcesProvider;
 
 import java.io.IOException;
 import java.io.Writer;
-
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,9 +95,14 @@ public class SoyRendererImpl implements SoyRenderer {
 		}
 
 		return _templateManager.getTemplate(
-			_soyTemplateResourcesProvider.getAllTemplateResources(), false);
+			_soyTemplateResourceFactory.createSoyTemplateResource(
+				_soyTemplateResourcesProvider.getAllTemplateResources()),
+			false);
 	}
 
+	@Reference
+	private SoyTemplateResourceFactory _soyTemplateResourceFactory;	
+	
 	@Reference
 	private SoyTemplateResourcesProvider _soyTemplateResourcesProvider;
 
