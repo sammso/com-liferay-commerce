@@ -1,4 +1,6 @@
-# Liferay Commerce
+# Liferay Commerce 2.0 - 7.2 EDITION
+
+**NOTE THIS IS EXPERIMENTAL ONLY**
 
 Liferay Commerce is an open source digital commerce platform written in Java. It was
 built from the ground up to work with Liferay Portal so that Liferay developers
@@ -20,18 +22,18 @@ it can support millions of products in challenging B2B industries.
 
 ## Quick Start
 
-Requirements: [Liferay Portal 7.1 GA1](https://github.com/liferay/liferay-portal)
+Requirements: [Liferay Portal 7.2.GA1](https://github.com/liferay/liferay-portal) ( JDK 8 to comoile )
 
 1.  Clone the Liferay Commerce repository (this
-    [repository](https://github.com/liferay/com-liferay-commerce)) to the same
+    [repository](https://github.com/sammso/com-liferay-commerce/tree/2.x-for-7.2)) to the same
     level of your directory tree as your Liferay Home folder (Liferay Home is
-    the folder that contains the Tomcat folder for Liferay 7.1).
+    the folder that contains the Tomcat folder for Liferay 7.2).
 
     Alternatively, you can determine where Commerce will deploy by passing in
     a path to Liferay Home in your `gradle.properties` file. For example:
-    `app.server.parent.dir=/home/computer/Documents/liferay-ce-7.1.0-ga1/`
+    `app.server.parent.dir=/home/computer/Documents/liferay-ce-portal-7.2.0-ga1/`
 
-2.  Start Liferay Portal 7.1.
+2.  Start Liferay Portal 7.2.
 
     In the terminal, navigate to the source code folder
     (`com-liferay-commerce`).
