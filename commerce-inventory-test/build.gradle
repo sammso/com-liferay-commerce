@@ -4,7 +4,7 @@ copyLibs {
 
 dependencies {
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.7"
-	testIntegrationCompile group: "com.liferay.portal", name: "release.portal.api", version: "7.1.1"
+	testIntegrationCompile group: "com.liferay.portal", name: "release.portal.api", version: "7.2.0"
 	testIntegrationCompile project(":apps:commerce:commerce-api")
 	testIntegrationCompile project(":apps:commerce:commerce-inventory-api")
 	testIntegrationCompile project(":apps:commerce:commerce-inventory-test-util")
