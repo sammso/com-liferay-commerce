@@ -44,12 +44,16 @@ import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Alec Sloan
@@ -85,10 +89,14 @@ public class CommerceCatalogLocalServiceImpl
 
 		// Group
 
+		Map<Locale, String> nameMap = new HashMap<>();
+		
+		nameMap.put(LocaleUtil.getDefault(), name);
+		
 		groupLocalService.addGroup(
 			user.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			CommerceCatalog.class.getName(), commerceCatalogId,
-			GroupConstants.DEFAULT_LIVE_GROUP_ID, name, null,
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap, null,
 			GroupConstants.TYPE_SITE_PRIVATE, false,
 			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, false, true,
 			null);
